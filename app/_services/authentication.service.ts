@@ -14,7 +14,7 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {
     this.httpOptions = {
-      headers: new HttpHeaders({ "Content-Type": "application/json" })
+      headers: new HttpHeaders({ "Content-Type": "x-www-form-urlencoded" })
     };
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
@@ -29,11 +29,12 @@ export class AuthenticationService {
   login(username: string, password: string) {
     return this.http
       .post<any>(
-        this.url + `/api-token-auth/`,
-        JSON.stringify({ username: username, password: password })
+        `https://housepredictionsystem.goldenstriker.repl.co/api-token-auth/`,
+        { username, password }
       )
       .pipe(
         map(user => {
+          console.log(user);
           // login successful if there's a jwt token in the response
           if (user && user.token) {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
